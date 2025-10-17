@@ -1,15 +1,22 @@
 import React from "react";
 import Header from "@/app/components/header";
+import { notFound } from "next/navigation";
 
 export interface PageProps {
-  params: { id: string[] };
+  params: Promise<{ id: string }>;
 }
 
-export default function Page({ params }: PageProps) {
+export default async function Page({ params }: PageProps) {
+  const { id } = await params;
+
+  const numId = Number.parseInt(id);
+  if (Number.isNaN(numId)) {
+    notFound();
+  }
+
   return (
     <>
-      <Header>Companies ({String(params.id)})</Header>
-      <p>{ new Date().toTimeString()}</p>
+      <Header>Company ({id})</Header>
     </>
   );
 }
